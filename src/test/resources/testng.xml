@@ -9,7 +9,7 @@
 		<listener
 			class-name="com.aventstack.chaintest.plugins.ChainTestListener" />
 		<listener
-			class-name="com.qa.opencart.listeners.TestAllureListener" />
+			class-name="com.qa.ecommerce.listners.TestAllureListener" />
 		<!-- <listener class-name="com.qa.opencart.listeners.AnnotationTransformer" 
 			/> -->
 
@@ -22,7 +22,7 @@
 
 
 		<classes>
-			<class name="com.qa.opencart.tests.LoginPageTest" />
+			<class name="com.qa.ecommerce.tests.LoginPageTest" />
 		</classes>
 	</test>
 
@@ -32,12 +32,12 @@
 		<parameter name="testname" value="Login Page Test" />
 
 		<classes>
-			<class name="com.qa.opencart.tests.LoginPageTest" />
+			<class name="com.qa.ecommerce.tests.LoginPageTest" />
 		</classes>
 	</test>
 
 
-	<test name="Accounts Page Test_chrome">
+	<!--<test name="Accounts Page Test_chrome">
 		<parameter name="browser" value="chrome" />
 		<parameter name="browserversion" value="123.0" />
 		<parameter name="testname" value="Accounts Page Test" />
@@ -77,7 +77,7 @@
 			<class name="com.qa.opencart.tests.RegisterPageTest" />
 		</classes>
 	</test>
-
+-->
 
 
 
