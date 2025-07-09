@@ -26,7 +26,7 @@
 		</classes>
 	</test>
 
-	<test name="Login Page Test_firefox">
+	<!--<test name="Login Page Test_firefox">
 		<parameter name="browser" value="firefox" />
 		<parameter name="browserversion" value="125.0" />
 		<parameter name="testname" value="Login Page Test" />
@@ -34,7 +34,7 @@
 		<classes>
 			<class name="com.qa.ecommerce.tests.LoginPageTest" />
 		</classes>
-	</test>
+	</test>-->
 
 
 	<!--<test name="Accounts Page Test_chrome">
