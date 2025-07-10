@@ -49,7 +49,6 @@ public class LoginPageTest extends BaseTest{
 	}
 	
 	
-	
 	@Test(enabled = true, description = "WIP -- forgot pwd check")
 	public void forgotPwd() {
 		System.out.println("forgot pwd ");

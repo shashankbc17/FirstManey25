@@ -60,7 +60,7 @@ public class BaseTest {
 			ChainTestListener.embed(DriverFactory.getScreenshotFile(), "image/png");
 		}
 		
-		//ChainTestListener.embed(DriverFactory.getScreenshotFile(), "image/png");
+		ChainTestListener.embed(DriverFactory.getScreenshotFile(), "image/png");
 
 
 	}

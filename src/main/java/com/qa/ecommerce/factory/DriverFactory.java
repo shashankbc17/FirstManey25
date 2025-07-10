@@ -21,6 +21,7 @@ import com.qa.opencart.exceptions.BrowserException;
 import com.qa.opencart.exceptions.FrameworkException;
 
 import io.qameta.allure.Step;
+import net.bytebuddy.asm.Advice.This;
 
 public class DriverFactory {
 
@@ -152,7 +153,7 @@ public class DriverFactory {
 	/**
 	 * takescreenshot
 	 */
-
+	
 	public static File getScreenshotFile() {
 		File srcFile = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);// temp dir
 		return srcFile;
