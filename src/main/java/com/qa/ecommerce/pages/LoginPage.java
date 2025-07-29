@@ -4,10 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import com.qa.ecommerce.util.ElementUtil;
+import com.qa.ecommerce.pages.AccountsPage;
 
 import io.qameta.allure.Step;
 
 import static com.qa.ecommerce.constants.AppConstants.*;
+import static com.qa.ecommerce.constants.AppConstants.MEDIUM_DEFAULT_TIMEOUT;
 
 public class LoginPage {
 	private WebDriver driver;
@@ -47,6 +49,16 @@ public class LoginPage {
 		return eleUtil.isElementDisplayed(forgotPwdLink);
 	}
 
+	@Step("login with valid username: {0} and password: {1}")
+	public AccountsPage doLogin(String username, String pwd) {
+		System.out.println("user credentials: " + username + ":" + pwd);
+		eleUtil.waitForElementVisible(email, MEDIUM_DEFAULT_TIMEOUT).sendKeys(username);
+		eleUtil.doSendKeys(password, pwd);
+		eleUtil.doClick(loginBtn);
+		//after clicking on login button ---> landing on Accounts Page
+		//responsible to return the AccountsPage class object
+		return new AccountsPage(driver);
+	}
 	
 	
 	

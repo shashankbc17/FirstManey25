@@ -16,7 +16,10 @@ import org.testng.annotations.Parameters;
 
 import com.aventstack.chaintest.plugins.ChainTestListener;
 import com.qa.ecommerce.factory.DriverFactory;
+import com.qa.ecommerce.pages.AccountsPage;
 import com.qa.ecommerce.pages.LoginPage;
+import com.qa.ecommerce.pages.ProductInfoPage;
+import com.qa.ecommerce.pages.SearchResultsPage;
 
 import io.qameta.allure.Description;
 
@@ -29,20 +32,28 @@ public class BaseTest {
 	protected Properties prop;
 	
 	protected LoginPage loginPage;
+	protected AccountsPage accPage;
+	protected SearchResultsPage searchResultsPage;
+	protected ProductInfoPage productInfoPage;
 	
 	private static final Logger log = LogManager.getLogger(BaseTest.class);
 
 	
 	@Description("init the driver and properties")
-	@Parameters({"browser"})
+	@Parameters({"browser","browserversion","testname"})
 	@BeforeTest
-	public void setup(String browserName) {
+	public void setup(String browserName,String browserVersion,String testname) {
 		df = new DriverFactory();
 		prop = df.initProp();
 		
 			//browserName is passed from .xml file
 			if(browserName!=null) {
 				prop.setProperty("browser", browserName);
+				if(Boolean.parseBoolean(prop.getProperty("remote")) ) {
+					prop.setProperty("browserversion", browserVersion);
+					prop.setProperty("testname", testname);
+				}
+				
 			}
 
 		driver = df.initDriver(prop);//login page

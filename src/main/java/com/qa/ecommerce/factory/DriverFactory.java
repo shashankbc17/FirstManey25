@@ -4,22 +4,27 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.aspectj.util.FileUtil;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import com.aventstack.chaintest.plugins.ChainTestListener;
 import com.qa.opencart.exceptions.BrowserException;
 import com.qa.opencart.exceptions.FrameworkException;
 
+import io.netty.handler.codec.http.multipart.FileUpload;
 import io.qameta.allure.Step;
 import net.bytebuddy.asm.Advice.This;
 
@@ -56,13 +61,28 @@ public class DriverFactory {
 		highlight = prop.getProperty("highlight");
 		switch (browserName.toLowerCase().trim()) {
 		case "chrome":
-			tlDriver.set(new ChromeDriver(optionsManager.getChromeOptions()));			
+			if(Boolean.parseBoolean(prop.getProperty("remote"))) {
+				initRemoteWebdriver("chrome");
+			}
+			else {
+				tlDriver.set(new ChromeDriver(optionsManager.getChromeOptions()));	
+			}			
 			break;
 		case "edge":
-			tlDriver.set(new EdgeDriver(optionsManager.getEdgeOptions()));			
+			if(Boolean.parseBoolean(prop.getProperty("remote"))) {
+				initRemoteWebdriver("edge");
+			}
+			else {
+				tlDriver.set(new EdgeDriver(optionsManager.getEdgeOptions()));	
+			}			
 			break;
 		case "firefox":
-			tlDriver.set(new FirefoxDriver(optionsManager.getFirefoxOptions()));			
+			if(Boolean.parseBoolean(prop.getProperty("remote"))) {
+				initRemoteWebdriver("firefox");
+			}
+			else {
+				tlDriver.set(new FirefoxDriver(optionsManager.getFirefoxOptions()));
+			}					
 			break;
 		case "safari":
 			tlDriver.set(new SafariDriver());			
@@ -79,6 +99,35 @@ public class DriverFactory {
 		return getDriver();
 	}
 	
+	public void initRemoteWebdriver(String browsername) {
+		
+		switch(browsername) {
+		case "chrome":
+			try {
+				tlDriver.set(new RemoteWebDriver(new URL(prop.getProperty("hubUrl")), optionsManager.getChromeOptions()));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			break;
+		case "firefox":
+			try {
+				tlDriver.set(new RemoteWebDriver(new URL(prop.getProperty("hubUrl")), optionsManager.getFirefoxOptions()));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			break;
+		case "edge":
+			try {
+				tlDriver.set(new RemoteWebDriver(new URL(prop.getProperty("hubUrl")), optionsManager.getEdgeOptions()));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			break;
+			default:
+				log.error("PLease Pass in valid Browser Name/Safari is Not Suported"+browsername);
+				throw new BrowserException("===INVALID BROWSER===");
+		}	
+	}
 	
 	/**
 	 * getDriver: get the local thready copy of the driver
@@ -114,19 +163,19 @@ public class DriverFactory {
 				log.info("Running tests on env: " + envName);
 				switch (envName.toLowerCase().trim()) {
 				case "qa":
-					ip = new FileInputStream("./src/test/resources/configurationFiles/qa.config.properties");
+					ip = new FileInputStream("./src/test/resources/config/qa.config.properties");
 					break;
 				case "dev":
-					ip = new FileInputStream("./src/test/resources/configurationFiles/dev.config.properties");
+					ip = new FileInputStream("./src/test/resources/config/dev.config.properties");
 					break;
 				case "stage":
-					ip = new FileInputStream("./src/test/resources/configurationFiles/stage.config.properties");
+					ip = new FileInputStream("./src/test/resources/config/stage.config.properties");
 					break;
 				case "uat":
-					ip = new FileInputStream("./src/test/resources/configurationFiles/uat.config.properties");
+					ip = new FileInputStream("./src/test/resources/config/uat.config.properties");
 					break;
 				case "prod":
-					ip = new FileInputStream("./src/test/resources/configurationFiles/prod.config.properties");
+					ip = new FileInputStream("./src/test/resources/config/prod.config.properties");
 					break;
 
 				default:
@@ -153,7 +202,7 @@ public class DriverFactory {
 	/**
 	 * takescreenshot
 	 */
-	
+
 	public static File getScreenshotFile() {
 		File srcFile = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);// temp dir
 		return srcFile;
